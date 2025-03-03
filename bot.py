@@ -1,10 +1,18 @@
-from flask import Flask, request
+import os
+import telebot
 import requests
+from flask import Flask, request
 
-TOKEN = "7712064275:AAG2lixEH7q_JWXGwhUcndfcE4F8AD9oub4"  
-WEBHOOK_URL = "http://www.doreakhar.ir:2082/"
+# دریافت توکن از متغیر محیطی در Railway
+TOKEN = os.getenv("BOT_TOKEN")  
+WEBHOOK_URL = "https://your-railway-url.up.railway.app/"  # بعداً با URL واقعی جایگزین می‌کنیم
 
 app = Flask(__name__)
+bot = telebot.TeleBot(TOKEN)
+
+@app.route("/", methods=["GET"])
+def home():
+    return "The bot is running!", 200
 
 @app.route("/webhook", methods=["POST"])
 def webhook():
@@ -34,5 +42,6 @@ def webhook():
 
     return "OK", 200
 
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+if name == "__main__":
+    port = int(os.environ.get("PORT", 5000))  # تنظیم پورت برای Railway
+    app.run(host="0.0.0.0", port=port)
